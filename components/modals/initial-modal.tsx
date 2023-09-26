@@ -29,6 +29,8 @@ import { Button } from '../ui/button';
 
 
 import { useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react';
+import { FileUpload } from '../file-upload';
 
 const formSchema = z.object({
     name : z.string().min(1, {
@@ -42,6 +44,12 @@ const formSchema = z.object({
 
 export const InitialModal = () => {
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect (() => {
+        setIsMounted(true)
+    },[])
+
     const form = useForm({
         resolver : zodResolver(formSchema),
         defaultValues : {
@@ -54,6 +62,10 @@ export const InitialModal = () => {
 
     const onSubmit = async ( values : z.infer<typeof formSchema>) => {
         console.log(values)
+    }
+
+    if(!isMounted) {
+        return null
     }
 
     return (
@@ -73,7 +85,23 @@ export const InitialModal = () => {
              <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <div className='space-y-8 px-6 '>
                     <div className='flex items-center justify-center text-center'>
-                        TODO : IMG
+                        <FormField
+                        control={form.control}
+                        name='imageUrl'
+                        render={({field}) => (
+
+                            <FormItem>
+                                <FormControl>
+                                   <FileUpload
+                                   endpoint='serverImage'
+                                   value={field.value}
+                                   onChange={field.onChange}
+                                   />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                        
+                        />
                     </div>
 
                     <FormField 
@@ -92,10 +120,16 @@ export const InitialModal = () => {
                                 {...field}
                                 />
                             </FormControl>
+                            <FormMessage/>
                         </FormItem>
                     )}
                     />
                 </div>
+                <DialogFooter className='bg-gray-100 px-6 py-4'>
+                    <Button variant='primary' disabled={isLoading}>
+                        Create
+                    </Button>
+                </DialogFooter>
              </form>
             </Form>
         </DialogContent>
