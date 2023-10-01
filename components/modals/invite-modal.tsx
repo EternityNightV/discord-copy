@@ -38,7 +38,7 @@ export const InviteModal = () => {
 
     setTimeout(() => {
       setCopied(false)
-    },1000)
+    }, 1000)
   }
 
   const onNew = async () => {
