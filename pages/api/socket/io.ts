@@ -4,7 +4,7 @@ import { NextApiRequest } from 'next'
 import { Server as ServerIO } from 'socket.io'
 
 import  { NextApiResponceServerIo } from '@/type'
-import { AnyZodTuple } from 'zod';
+
 
 export const config = {
     api: {
